@@ -10,45 +10,40 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BLOC BUILDER"),
+        title: const Text("BLOC LISTENER"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Pakai BlocBuilder
-          BlocBuilder<Counter, int>(
+          BlocListener<Counter, int>(
             bloc: mycounter,
-            buildWhen: (previous, current) {
-              if (current % 2 == 1) {
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 1),
+                  content: Text("DATA GENAP"),
+                ),
+              );
+            },
+            listenWhen: (previous, current) {
+              if (current % 2 == 0) {
                 return true;
               } else {
                 return false;
               }
             },
-            builder: (context, state) {
-              return Text(
-                "$state",
-                style: const TextStyle(
-                  fontSize: 50,
-                ),
-              );
-            },
+            child: BlocBuilder<Counter, int>(
+              bloc: mycounter,
+              builder: (context, state) {
+                return Text(
+                  "$state",
+                  style: const TextStyle(
+                    fontSize: 50,
+                  ),
+                );
+              },
+            ),
           ),
-
-          // Pakai Stream Builder
-
-          // StreamBuilder(
-          //   initialData: mycounter.init,
-          //   stream: mycounter.stream,
-          //   builder: (context, snapshot) {
-          //     return Text(
-          //       "${snapshot.data}",
-          //       style: const TextStyle(
-          //         fontSize: 50,
-          //       ),
-          //     );
-          //   },
-          // ),
           const SizedBox(
             height: 20,
           ),
