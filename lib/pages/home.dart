@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_state_management/bloc/counter.dart';
-
-import 'data_widget.dart';
+import 'package:flutter_bloc_state_management/pages/data_widget.dart';
 
 class HomePage extends StatelessWidget {
   // inisial class counter
   HomePage({super.key});
 
   Counter mycounter = Counter();
-  
 
   @override
   Widget build(BuildContext context) {
+    Counter mycounter = BlocProvider.of<Counter>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -45,7 +44,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               // Widget data counter
-              DataWidget(mycounter: mycounter),
+              const DataWidget(),
               // button +
               Material(
                 color: Colors.blue,
