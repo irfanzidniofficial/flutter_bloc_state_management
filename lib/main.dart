@@ -2,33 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_state_management/bloc/counter.dart';
 import 'package:flutter_bloc_state_management/bloc/theme.dart';
-import 'package:flutter_bloc_state_management/pages/home.dart';
+import 'package:flutter_bloc_state_management/app.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final ThemeBloc myTheme = ThemeBloc();
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => myTheme,
-      child: BlocBuilder<ThemeBloc, bool>(
-        bloc: myTheme,
-        builder: (context, state) {
-          return MaterialApp(
-            theme: state == true ? ThemeData.light() : ThemeData.dark(),
-            home: BlocProvider(
-              create: (context) => CounterBloc(),
-              child: HomePage(),
-            ),
-          );
-        },
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CounterBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ThemeBloc(),
+        ),
+      ],
+      child: const App(),
     );
   }
 }
