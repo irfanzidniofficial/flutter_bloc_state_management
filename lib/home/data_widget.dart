@@ -10,12 +10,17 @@ class DataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Counter mycounter = BlocProvider.of<Counter>(context);
-    return const Text(
-      '0',
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 50,
-      ),
+    return BlocBuilder(
+      bloc: mycounter,
+      builder: (context, state) {
+        return Text(
+          '$state',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 50,
+          ),
+        );
+      },
     );
   }
 }
