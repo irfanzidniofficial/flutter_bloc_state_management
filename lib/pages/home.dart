@@ -7,71 +7,90 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserBloc userBloc = context.read<UserBloc>();
+    // EXTENTION METHOD
+    // 1. context.read()
+    // 2. context.watch()
+    // 3. context.select()
+
+    // CounterBloc myCounter =
+    //     context.read<CounterBloc>(); // hanya membaca 1x (pertama kali)
+    UserBloc myUser =
+        context.read<UserBloc>(); // hanya membaca 1x (pertama kali)
+    // CounterBloc myCounter = context.watch<
+    //     CounterBloc>(); // membaca berkali-kali (ketika state pada bloc berubah)
+
+    // membaca berkali-kali (ketika state pada bloc berubah)
+    // String nameUser = context.select<UserBloc, String>(
+    //   (value) => value.state["name"],
+    // );
+    // int ageUser = context.select<UserBloc, int>(
+    //   (value) => value.state["age"],
+    // );
+
+    print('BUILD SCAFFOLD');
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HOME'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          // BlocBuilder<UserBloc, Map<String, dynamic>>(
-          //   bloc: userBloc,
-          //   builder: (context, state) {
-          //     print('TEXT NAME => BUILD');
-          //     return Text("NAMA: ${state['name']}");
-          //   },
-          // ),
-          // BlocBuilder<UserBloc, Map<String, dynamic>>(
-          //   bloc: userBloc,
-          //   builder: (context, state) {
-          //     print('TEXT UMUR => BUILD');
-          //     return Text("UMUR: ${state['age']} Tahun");
-          //   },
-          // ),
-          BlocSelector<UserBloc, Map<String, dynamic>, String>(
-            selector: (state) => state['name'],
-            builder: (context, state) {
-              print('TEXT NAME => BUILD');
-              return Text("NAMA: $state");
-            },
-          ),
-          BlocSelector<UserBloc, Map<String, dynamic>, int>(
-            selector: (state) => state['age'],
-            builder: (context, state) {
-              print('TEXT UMUR => BUILD');
-              return Text("NAMA: $state");
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextField(
-            onChanged: (value) => userBloc.changeName(value),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  userBloc.changeAge(userBloc.state["age"] - 1);
-                },
-                icon: const Icon(Icons.remove),
-              ),
-              IconButton(
-                onPressed: () {
-                  userBloc.changeAge(userBloc.state["age"] + 1);
-                },
-                icon: const Icon(Icons.add),
-              ),
-            ],
-          )
-        ],
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Builder(builder: (context) {
+              String nameUser = context.select<UserBloc, String>(
+                (value) => value.state["name"],
+              );
+              print("BUILD TEXT NAMA");
+              return Text("NAMA: $nameUser ");
+            }),
+            Builder(builder: (context) {
+              int ageUser = context.select<UserBloc, int>(
+                (value) => value.state["age"],
+              );
+              print("BUILD TEXT UMUR");
+              return Text("UMUR: $ageUser");
+            }),
+
+            // BlocBuilder<CounterBloc, int>(
+            //   builder: (context, state) {
+            //     print('BUILD TEXT');
+            //     return Builder(
+            //       builder: (context) {
+            //         CounterBloc myCounter = context.watch<CounterBloc>();
+            //         return Text(
+            //           '${myCounter.state}',
+            //           style: const TextStyle(
+            //             fontSize: 100,
+            //           ),
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    myUser.changeAge(
+                      (myUser.state["age"] - 1),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.remove,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    myUser.changeAge(
+                      (myUser.state["age"] + 1),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
