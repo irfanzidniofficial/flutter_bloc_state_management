@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_state_management/bloc/counter.dart';
-import 'package:flutter_bloc_state_management/home/home.dart';
+import 'package:flutter_bloc_state_management/routes/routes.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final router = MyRouter();
 
   @override
   Widget build(BuildContext context) {
-    // return BlocProvider(
-    //   create: (context) => Counter(),
-    //   child: const MaterialApp(
-    //     home: HomePage(),
-    //   ),
-    // );
-    // return
     return MaterialApp(
-      home: BlocProvider(
-        create: (context) => Counter(),
-        child: const HomePage(),
-      ),
+      onGenerateRoute: router.onRoute,
     );
   }
 }
