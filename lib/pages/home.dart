@@ -1,99 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_state_management/bloc/counter.dart';
-import 'package:flutter_bloc_state_management/bloc/theme.dart';
+import 'package:flutter_bloc_state_management/bloc/user.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    CounterBloc myCounter = context.read<CounterBloc>();
-    ThemeBloc myTheme = context.read<ThemeBloc>();
+    UserBloc userBloc = context.read<UserBloc>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('HOME'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MultiBlocListener(
-              listeners: [
-                // BUAT LISTEN TEMA BLOC
-                BlocListener<ThemeBloc, bool>(
-                  listener: (context, state) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('TEMA GELAP AKTIF'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  listenWhen: (previous, current) {
-                    if (current == false) {
-                      return true;
-                    } else {
-                      return false;
-                    }
-                  },
-                ),
-                // BUAT LISTEN COUNTER BLOC
-                BlocListener<CounterBloc, int>(
-                  listener: (context, state) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('DI ATAS 10'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  listenWhen: (previous, current) {
-                    if (current > 10) {
-                      return true;
-                    } else {
-                      return false;
-                    }
-                  },
-                ),
-              ],
-              child: BlocBuilder<CounterBloc, int>(
-                bloc: myCounter,
-                builder: (context, state) {
-                  return Text(
-                    '$state',
-                    style: const TextStyle(
-                      fontSize: 50,
-                    ),
-                  );
-                },
-              ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          // BlocBuilder<UserBloc, Map<String, dynamic>>(
+          //   bloc: userBloc,
+          //   builder: (context, state) {
+          //     print('TEXT NAME => BUILD');
+          //     return Text("NAMA: ${state['name']}");
+          //   },
+          // ),
+          // BlocBuilder<UserBloc, Map<String, dynamic>>(
+          //   bloc: userBloc,
+          //   builder: (context, state) {
+          //     print('TEXT UMUR => BUILD');
+          //     return Text("UMUR: ${state['age']} Tahun");
+          //   },
+          // ),
+          BlocSelector<UserBloc, Map<String, dynamic>, String>(
+            selector: (state) => state['name'],
+            builder: (context, state) {
+              print('TEXT NAME => BUILD');
+              return Text("NAMA: $state");
+            },
+          ),
+          BlocSelector<UserBloc, Map<String, dynamic>, int>(
+            selector: (state) => state['age'],
+            builder: (context, state) {
+              print('TEXT UMUR => BUILD');
+              return Text("NAMA: $state");
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextField(
+            onChanged: (value) => userBloc.changeName(value),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    myCounter.remove();
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                IconButton(
-                  onPressed: () {
-                    myCounter.add();
-                  },
-                  icon: const Icon(Icons.add),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // panggil bloc theme
-          myTheme.changeTheme();
-        },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  userBloc.changeAge(userBloc.state["age"] - 1);
+                },
+                icon: const Icon(Icons.remove),
+              ),
+              IconButton(
+                onPressed: () {
+                  userBloc.changeAge(userBloc.state["age"] + 1);
+                },
+                icon: const Icon(Icons.add),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
