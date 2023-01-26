@@ -12,20 +12,4 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       emit((state + 1) * event.value);
     });
   }
-
-  @override
-  void onChange(change) {
-    print(change);
-  }
-
-  @override
-  void onError(error, trace) {
-    print(error);
-    print(trace);
-  }
-
-  @override
-  void onTransition(transition) {
-    print(transition);
-  }
 }
