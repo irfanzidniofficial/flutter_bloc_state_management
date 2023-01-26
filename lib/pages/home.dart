@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_state_management/bloc/counter.dart';
-
-import '../bloc/counter_event.dart';
+import 'package:flutter_bloc_state_management/bloc/counter_event.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-
-  final CounterBloc counterB = CounterBloc();
+  CounterBloc counterB = CounterBloc(0);
+  int value = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +37,13 @@ class HomePage extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    counterB.add(CounterEvent.decrement);
+                    counterB.add(DecrementCounter(value));
                   },
                   icon: const Icon(Icons.remove),
                 ),
                 IconButton(
                   onPressed: () {
-                    counterB.add(CounterEvent.increment);
+                    counterB.add(IncrementCounter(value));
                   },
                   icon: const Icon(Icons.add),
                 ),
